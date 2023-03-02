@@ -1,0 +1,63 @@
+using System.CodeDom.Compiler;
+using System.Collections.Generic;
+using System.Collections;
+using System.ComponentModel;
+using System.Diagnostics.CodeAnalysis;
+using System.Globalization;
+using System.IO;
+using System.Linq;
+using System.Reflection;
+using System.Runtime.Serialization;
+using System.Text.RegularExpressions;
+using System.Text;
+using System;
+
+class Result
+{
+    public static int GetMaxBitwiseAnd(int N, int K)
+    {
+        int maxBitwiseAnd = 0;
+        for (int i = 1; i <= N; i++)
+        {
+            for (int j = i + 1; j <= N; j++)
+            {
+                int currentBitwiseAnd = i & j;
+
+                if (currentBitwiseAnd < K && currentBitwiseAnd > maxBitwiseAnd)
+                {
+                    maxBitwiseAnd = currentBitwiseAnd;
+                }
+            }
+        }
+        return maxBitwiseAnd;
+    }
+    public static int GetMaxBitwiseAnd1(int N, int K) // two solution
+    {
+        return Enumerable.Range(1, N)
+            .SelectMany(i => Enumerable.Range(i + 1, N - i))
+            //.Select(j => j & i) // dlaczego pod i jest błąd, to nie wiem 
+            .Where(x => x < K)
+            .DefaultIfEmpty(0)
+            .Max();
+    }
+}
+
+class Solution
+{
+    public static void Main(string[] args)
+    {
+        int t = Convert.ToInt32(Console.ReadLine().Trim());
+
+        for (int tItr = 0; tItr < t; tItr++)
+        {
+            string[] firstMultipleInput = Console.ReadLine().TrimEnd().Split(' ');
+
+            int count = Convert.ToInt32(firstMultipleInput[0]);
+
+            int lim = Convert.ToInt32(firstMultipleInput[1]);
+
+            int res = Result.GetMaxBitwiseAnd(count, lim);
+            Console.WriteLine(res);           
+        }
+    }
+}
